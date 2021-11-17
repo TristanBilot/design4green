@@ -92,7 +92,7 @@ class Graph extends Component {
          row = row.set("Cycle life priority", priorities.indexOf(cycleLife))
          return row
       }
-      
+
     async getGanttGraph(criterions) {
         console.log("this.state.dataframe")
         console.log(this.state.dataframe)
@@ -117,26 +117,34 @@ class Graph extends Component {
         let baseXPosition = new Date(2014, 2, 22)
         let widthOfCycleLife = 4
         let i = 1
+        var lastRow = null;
 
         df.chain(row => {
             let cycleLifeIndex = cycleLifeCategories.indexOf(row.get("Etape Cycle de Vie"))
             let begXPosition = new Date(baseXPosition.getTime() + (widthOfCycleLife * cycleLifeIndex) * day)
             let endXPosition = new Date(baseXPosition.getTime() + (widthOfCycleLife * cycleLifeIndex) * day + widthOfCycleLife * day)
     
-            graph.push({
+            let node = {
                 TaskID: i,
                 TaskName: row.get("Use Case"),
                 StartDate: begXPosition,
                 EndDate: endXPosition,
-                subtasks: []
-            })
+                subtasks: [],
+            }
+            if (lastRow != null && lastRow.get("Etape Cycle de Vie") != row.get("Etape Cycle de Vie")) {
+                node["Predecessor"] = i - 1
+            }
+
+            graph.push(node)
+            lastRow = row
 
             labels.push({
                 resourceId: i++,
                 resourceName: row.get("CRITERES")
             })
-            console.log(row.get("Etape Cycle de Vie"))
         })
+        // graph[2]["Predecessor"] = 2
+        console.log(graph)
     
         this.setState({
             graph: graph,
