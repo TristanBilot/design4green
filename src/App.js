@@ -1,3 +1,5 @@
+import SchemaPage from "./Components/SchemaPage";
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -20,6 +22,7 @@ function App() {
           </Route>
 
           <Route path='/'>
+            <SchemaPage></SchemaPage>
             {/* here are the components */}
           </Route>
         </Switch>
