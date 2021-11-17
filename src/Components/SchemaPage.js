@@ -3,7 +3,7 @@ import Chart from "react-google-charts";
 import '../Styles/articles.scss';
 import csvFile from '../INR.csv'
 const Papa = require('papaparse');
-const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer');
 
 
 class SchemaPage extends Component {
@@ -17,7 +17,7 @@ class SchemaPage extends Component {
 
   async componentWillMount() {
       await this.loadCsv()
-      await this.take_screen()
+      // await this.take_screen()
   }
 
   async loadCsv() {
@@ -36,14 +36,14 @@ class SchemaPage extends Component {
     console.log(this.state.csv)
   }
 
-  async take_screen() {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto('/');
-    await page.screenshot({ path: 'example.png' });
+  // async take_screen() {
+  //   const browser = await puppeteer.launch();
+  //   const page = await browser.newPage();
+  //   await page.goto('/');
+  //   await page.screenshot({ path: 'example.png' });
   
-    await browser.close();
-  } 
+  //   await browser.close();
+  // } 
 
   // timeout(delay) {
   //     return new Promise( res => setTimeout(res, delay) );
