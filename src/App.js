@@ -1,4 +1,5 @@
-import SchemaPage from "./Components/SchemaPage";
+import ListsOfMovies from "./Components/ListOfMovies";
+import Graph from "./Components/Graph";
 
 import {
   BrowserRouter as Router,
@@ -16,13 +17,14 @@ function App() {
     <Router>
       <div id="app-root">
         <Switch>
-          <Route path="/genetic-tsp">
+          <Route path="/list">
+          <ListsOfMovies></ListsOfMovies>
             {/* <Tsp />
             <TspScript /> */}
           </Route>
 
           <Route path='/'>
-            <SchemaPage></SchemaPage>
+            <Graph></Graph>
             {/* here are the components */}
           </Route>
         </Switch>
