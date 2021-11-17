@@ -14,11 +14,14 @@ class SchemaPage extends Component {
     this.state = {
       dataframe: null,
       columns: [],
+      graph: [],
     }
   }
 
   async componentWillMount() {
       await this.loadCsv()
+      await this.timeout(100)
+      await this.getGanttGraph()
       // await this.take_screen()
   }
 
@@ -39,37 +42,97 @@ class SchemaPage extends Component {
     let data = csv.slice(1)
     let df = new DataFrame(data, columns)
 
+    // df = df.chain(row => row.get("Etape Cycle de Vie") != "N/A")
+
     this.state.columns = columns
     this.state.dataframe = df
-
-    this.getGanttInfoAsDataframe([
-      "L'entreprise est-elle ouverte à une démarche NR qui pourrait fédérer les énergies autour d'un projet novateur ?",
-      "Le besoin métier est-il exprimé ?"
-    ])
   }
 
   /* dataframe getters */
 
-  getGanttInfoAsDataframe(criterions) {
+  getGanttInfoAsDataframe(ids) {
     let dfs = []
-    criterions.forEach(criterion => {
+
+    // for each id, fetch the required column infos 
+    ids.forEach(id => {
       let df = this.state.dataframe.filter(row => row
-        .get("CRITERES") === criterion)
+        .get("ID") === id)
         .select("CRITERES", "Etape Cycle de Vie", "incontournables", "Use Case", "JUSTIFICATIONS", "Priorité");
       dfs.push(df)
     })
     
+    // merge all the rows dataframes in one dataframe
     let totalDf = new DataFrame([]);
     dfs.forEach(df => {
       totalDf = totalDf.union(df)
     })
+
+    // parse the priority to integers
     totalDf = totalDf.chain(this.translatePriorityToInteger)
-    console.log(totalDf)
+    totalDf = this.sortDataframe(totalDf)
     return totalDf
   }
 
-  getGanttGraph(criterions) {
+  sortDataframe(df) {
+    // add a new colum with an integer representing the priority based on cycle life
+    df = df.withColumn("Cycle life priority")
+    df = df.chain(this.translateCycleLifeToInteger)
 
+    // sort first by priority and then by cycle life to make groups
+    df = df.sortBy("Priorité")
+    df = df.sortBy("Cycle life priority")
+    return df
+  }
+
+  async getGanttGraph(criterions) {
+    if (this.state.dataframe == null)
+      return []
+    let df = this.getGanttInfoAsDataframe([
+      "STR-1.07",
+      "STR-1.C09",
+      "STR-1.16",
+      "STR-3.C06",
+      "STR-3.C05",
+      "STR-3.07"
+    ])
+
+    let cycleLifeCategories = [ 'Acquisition', 'Conception', 'Réalisation', 'Déploiement', 'Administration', 
+     'Utilisation', 'Maintenance', 'Fin de Vie', 'Revalorisation' ]
+    let baseXPosition = new Date(2014, 2, 22)
+    let widthOfCycleLife = 4
+
+    let graph = [[
+      { type: 'string', label: 'Task ID' },
+      { type: 'string', label: 'Task Name' },
+      { type: 'string', label: 'Resource' },
+      { type: 'date', label: 'Start Date' },
+      { type: 'date', label: 'End Date' },
+      { type: 'number', label: 'Duration' },
+      { type: 'number', label: 'Percent Complete' },
+      { type: 'string', label: 'Dependencies' },
+    ]]
+    df.chain(row => {
+      let cycleLifeIndex = cycleLifeCategories.indexOf(row.get("Etape Cycle de Vie"))
+      let begXPosition = new Date(baseXPosition.getTime() + (widthOfCycleLife * cycleLifeIndex) * 1000*60*60*24)
+      let endXPosition = new Date(baseXPosition.getTime() + (widthOfCycleLife * cycleLifeIndex) * 1000*60*60*24 * 2)
+
+      graph.push([
+        row.get("CRITERES"),
+        'Spring 2014',
+        'spring',
+        begXPosition,
+        endXPosition,
+        null,
+        100,
+        null,
+      ])
+      // console.log()
+    })
+
+    this.setState({
+      graph: graph,
+  })
+    return graph
   }
 
   /* helpers */
@@ -84,6 +147,15 @@ class SchemaPage extends Component {
     }
     row = row.set("Priorité", priorities[priority])
     return row
+  }
+
+  translateCycleLifeToInteger(row) {
+    let cycleLife = row.get("Etape Cycle de Vie")
+    let priorities = [ 'Acquisition', 'Conception', 'Réalisation', 'Déploiement', 'Administration', 
+     'Utilisation', 'Maintenance', 'Fin de Vie', 'Revalorisation' ]
+
+     row = row.set("Cycle life priority", priorities.indexOf(cycleLife))
+     return row
   }
 
   // get() {
@@ -101,11 +173,12 @@ class SchemaPage extends Component {
   //   await browser.close();
   // } 
 
-  // timeout(delay) {
-  //     return new Promise( res => setTimeout(res, delay) );
-  // }
+  timeout(delay) {
+      return new Promise( res => setTimeout(res, delay) );
+  }
 
   render() {
+    console.log(this.state.graph)
     return (
       <div className="header">
         <div className="container-fluid">
@@ -118,138 +191,7 @@ class SchemaPage extends Component {
   height={'400px'}
   chartType="Gantt"
   loader={<div>Loading Chart</div>}
-  data={[
-    [
-      { type: 'string', label: 'Task ID' },
-      { type: 'string', label: 'Task Name' },
-      { type: 'string', label: 'Resource' },
-      { type: 'date', label: 'Start Date' },
-      { type: 'date', label: 'End Date' },
-      { type: 'number', label: 'Duration' },
-      { type: 'number', label: 'Percent Complete' },
-      { type: 'string', label: 'Dependencies' },
-    ],
-    [
-      '2014Spring',
-      'Spring 2014',
-      'spring',
-      new Date(2014, 2, 22),
-      new Date(2014, 5, 20),
-      null,
-      100,
-      null,
-    ],
-    [
-      '2014Summer',
-      'Summer 2014',
-      'summer',
-      new Date(2014, 5, 21),
-      new Date(2014, 8, 20),
-      null,
-      100,
-      null,
-    ],
-    [
-      '2014Autumn',
-      'Autumn 2014',
-      'autumn',
-      new Date(2014, 8, 21),
-      new Date(2014, 11, 20),
-      null,
-      100,
-      null,
-    ],
-    [
-      '2014Winter',
-      'Winter 2014',
-      'winter',
-      new Date(2014, 11, 21),
-      new Date(2015, 2, 21),
-      null,
-      100,
-      null,
-    ],
-    [
-      '2015Spring',
-      'Spring 2015',
-      'spring',
-      new Date(2015, 2, 22),
-      new Date(2015, 5, 20),
-      null,
-      50,
-      null,
-    ],
-    [
-      '2015Summer',
-      'Summer 2015',
-      'summer',
-      new Date(2015, 5, 21),
-      new Date(2015, 8, 20),
-      null,
-      0,
-      null,
-    ],
-    [
-      '2015Autumn',
-      'Autumn 2015',
-      'autumn',
-      new Date(2015, 8, 21),
-      new Date(2015, 11, 20),
-      null,
-      0,
-      null,
-    ],
-    [
-      '2015Winter',
-      'Winter 2015',
-      'winter',
-      new Date(2015, 11, 21),
-      new Date(2016, 2, 21),
-      null,
-      0,
-      null,
-    ],
-    [
-      'Football',
-      'Football Season',
-      'sports',
-      new Date(2014, 8, 4),
-      new Date(2015, 1, 1),
-      null,
-      100,
-      null,
-    ],
-    [
-      'Baseball',
-      'Baseball Season',
-      'sports',
-      new Date(2015, 2, 31),
-      new Date(2015, 9, 20),
-      null,
-      14,
-      null,
-    ],
-    [
-      'Basketball',
-      'Basketball Season',
-      'sports',
-      new Date(2014, 9, 28),
-      new Date(2015, 5, 20),
-      null,
-      86,
-      null,
-    ],
-    [
-      'Hockey',
-      'Hockey Season',
-      'sports',
-      new Date(2014, 9, 8),
-      new Date(2015, 5, 21),
-      null,
-      89,
-      null,
-    ],
-  ]}
+  data={ this.state.graph }
   options={{
     height: 400,
     gantt: {
