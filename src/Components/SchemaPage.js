@@ -1,17 +1,53 @@
 import React, { Component } from 'react';
 import Chart from "react-google-charts";
 import '../Styles/articles.scss';
-import csv from './CsvLoader';
+import csvFile from '../INR.csv'
+const Papa = require('papaparse');
+const puppeteer = require('puppeteer');
+
 
 class SchemaPage extends Component {
 
-    async componentWillMount() {
-        await this.loadCsv()
+  constructor(props) {
+    super(props)
+    this.state = {
+      csv: null,
     }
+  }
 
-    async loadCsv() {
-        console.log('hello')
-    }
+  async componentWillMount() {
+      await this.loadCsv()
+      await this.take_screen()
+  }
+
+  async loadCsv() {
+    if (this.state.csv == null) {
+      var binded = this.loadCsvBinded.bind(this)
+      Papa.parse(csvFile, {
+        download: true,
+        complete: binded,
+        encoding: 'UTF-8'
+    });
+  }
+  }
+
+  loadCsvBinded(input) {
+    this.state.csv = input.data;
+    console.log(this.state.csv)
+  }
+
+  async take_screen() {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto('/');
+    await page.screenshot({ path: 'example.png' });
+  
+    await browser.close();
+  } 
+
+  // timeout(delay) {
+  //     return new Promise( res => setTimeout(res, delay) );
+  // }
 
   render() {
     return (
