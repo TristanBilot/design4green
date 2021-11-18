@@ -133,7 +133,7 @@ class SelectionPage extends Component {
     render() {
         return (this.state.shouldDisplayGraph ?
             <div>
-                <GraphPage dataframe={this.state.dataframe}></GraphPage>
+                <GraphPage dataframe={this.state.dataframe} basket={this.state.basket}></GraphPage>
             </div>
             :
             <div>

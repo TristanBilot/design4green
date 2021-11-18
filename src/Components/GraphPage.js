@@ -10,6 +10,7 @@ class GraphPage extends Component {
         super(props)
         this.state = {
             dataframe: props.dataframe,
+            basket: props.basket,
             columns: [],
             graph: [],
             graphLabels: [],
@@ -70,25 +71,28 @@ class GraphPage extends Component {
         await this.getGanttGraph()
     }
 
-    
-
     async getGanttGraph(criterions) {
         console.log("this.state.dataframe")
         console.log(this.state.dataframe)
         if (this.state.dataframe == null)
             return []
-    
-        let df = this.getGanttInfoAsDataframe([
-            "STR-1.07",
-            "STR-1.C09",
-            "STR-1.16",
-            "STR-3.C06",
-            "STR-3.C05",
-            "STR-3.07",
-            "SPC-6.C01",
-            "UX/UI-3.01",
-            "ARCH-9.C02"
-        ])
+
+        // let ids = this.state.basket.map(e => e.id)
+        // let df = this.getGanttInfoAsDataframe(ids)
+        // console.log(df)
+        // return
+
+        // [
+        //     "STR-1.07",
+        //     "STR-1.C09",
+        //     "STR-1.16",
+        //     "STR-3.C06",
+        //     "STR-3.C05",
+        //     "STR-3.07",
+        //     "SPC-6.C01",
+        //     "UX/UI-3.01",
+        //     "ARCH-9.C02"
+        // ]
     
         let cycleLifeCategories = [ 'Acquisition', 'Conception', 'Réalisation', 'Déploiement', 'Administration', 
             'Utilisation', 'Maintenance', 'Fin de Vie', 'Revalorisation' ]
@@ -99,34 +103,32 @@ class GraphPage extends Component {
         let baseXPosition = this.projectStartDate
         let widthOfCycleLife = 4
         let i = 1
-        var lastRow = null;
+        var lastCycle = null;
 
-        df.chain(row => {
-            let cycleLifeIndex = cycleLifeCategories.indexOf(row.get("Etape Cycle de Vie"))
-            console.log('cycleLifeIndex')
-            console.log(cycleLifeIndex)
+        this.state.basket.forEach(element => {
+            let cycleLifeIndex = cycleLifeCategories.indexOf(element.cycle)
             let begXPosition = new Date(baseXPosition.getTime() + (widthOfCycleLife * cycleLifeIndex) * day)
             let endXPosition = new Date(baseXPosition.getTime() + (widthOfCycleLife * cycleLifeIndex) * day + widthOfCycleLife * day)
     
             let node = {
                 TaskID: i,
-                TaskName: row.get("Use Case"),
+                TaskName: element.useCase,
                 StartDate: begXPosition,
                 EndDate: endXPosition,
                 subtasks: [],
-                category: row.get("Famille d'origine"),
-                useCase: row.get("Use Case")
+                category: element.family,
+                useCase: element.useCase
             }
-            if (lastRow != null && lastRow.get("Etape Cycle de Vie") != row.get("Etape Cycle de Vie")) {
+            if (lastCycle != null && lastCycle != element.cycle) {
                 node["Predecessor"] = i - 1
             }
 
             graph.push(node)
-            lastRow = row
+            lastCycle = element.cycle
 
             labels.push({
                 resourceId: i++,
-                resourceName: row.get("CRITERES")
+                resourceName: element.criterion
             })
         })
 
