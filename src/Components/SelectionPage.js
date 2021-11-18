@@ -120,15 +120,7 @@ class SelectionPage extends Component {
       }
 
     async loadCategories() {
-        // if (this.state.dataframe == null) {
-        //     return
-        // }
-
         let categories = this.state.dataframe.distinct("Famille d'origine")
-        console.log("qsdjbdoznqsoidnqsdino")
-        console.log(categories)
-        // let categories = this.state.dataframe.get("Famille d'origine").select("Famille d'origine", "RECOMMANDATION")
-        
         let categoryDivs = []
         var i = 0
         categories.chain(category => {
@@ -137,8 +129,7 @@ class SelectionPage extends Component {
             
             categoryDivs.push(
                 <div key={i++}>
-                    {category.get("Famille d'origine")}
-                    <SelectionList recommandations={distinctRecommandations} />
+                    <SelectionList recommandations={distinctRecommandations} category={category.get("Famille d'origine")} />
                 </div>
             )
         })
@@ -146,10 +137,6 @@ class SelectionPage extends Component {
         this.setState({
             categories: categoryDivs
         })
-        console.log("categoryDivs")
-        console.log(categoryDivs)
-        // let categories = this.dataframe.chain(row => row.get("Famille d'origine"))
-
     }
 
     timeout(delay) {

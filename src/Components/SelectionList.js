@@ -18,7 +18,8 @@ class SelectionList extends Component {
     this.state = {
         movies: [],
         movie: {},
-        recommandations: props.recommandations
+        recommandations: props.recommandations,
+        category: props.category,
       };
   }
 
@@ -51,7 +52,7 @@ class SelectionList extends Component {
     this.state.recommandations.chain(recommandation => {
       recommandationDivs.push(
           <div className="menu-item" key={i++}>
-              <Recommandation recommandation={recommandation} />
+              <Recommandation recommandation={recommandation} category={this.state.category} />
           </div>
       )
     })
@@ -61,16 +62,26 @@ class SelectionList extends Component {
     })
   }
 
-  render() {
+  formatText(text) {
+    text = text.toLowerCase()
+    return text.charAt(0).toUpperCase() + text.slice(1)
+  }
 
+  render() {
+    console.log("this.state.categoru")
+    console.log(this.state.category)
     return (
       <div style={{
         backgroundColor: "white",
-        color: "black"
+        color: "black",
+        // texAlign: "center",
+        // textOverflow: "hidden"
       }}
        className="lists" >
         <br/>
-      <div style={{marginLeft:"20px",marginBottom:"-50px",width:"8px",height:"40px",backgroundColor:"rgb(143, 204, 115)"}}/> <h2 style={{marginLeft:"25px"}}>{this.props.heading}</h2><br/>
+        <div style={{marginLeft:"20px",marginBottom:"-35px",width:"8px",height:"30px",backgroundColor:"rgb(143, 204, 115)"}}/>
+          <h2 style={{marginLeft:"25px"}}>{this.formatText(this.state.category)}
+        </h2><br/>
         <ScrollMenu
           data={this.state.recommandations}
           arrowLeft={ArrowLeft}
