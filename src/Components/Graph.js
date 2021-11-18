@@ -49,8 +49,9 @@ class Graph extends Component {
         this.splitterSettings = {
             columnIndex: 2
         };
-        this.projectStartDate = new Date(2014, 2, 22)
-        this.projectEndDate = new Date(2014, 4, 22)
+        this.projectStartDate = new Date()
+        let projectNbDays = 40
+        this.projectEndDate = new Date(Date.now()+ (1000*60*60*24) * projectNbDays)
         this.gridLines = 'Both';
         this.toolbar = ['ExcelExport', 'CsvExport', 'PdfExport'];
         this.timelineSettings = {
@@ -131,7 +132,7 @@ class Graph extends Component {
         let graph = []
         let labels = []
         let day = 1000*60*60*24
-        let baseXPosition = new Date(2014, 2, 22)
+        let baseXPosition = this.projectStartDate
         let widthOfCycleLife = 4
         let i = 1
         var lastRow = null;
