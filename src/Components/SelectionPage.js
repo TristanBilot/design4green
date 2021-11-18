@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import SelectionList from "./SelectionList";
 import csvFile from '../INR.csv'
 import DataFrame from "dataframe-js";
+import './css/mainPage.css'
+import './css/basketPage.scss'
+import BasketPage from './BasketPage';
 
 const Papa = require('papaparse');
 
@@ -13,42 +16,9 @@ class SelectionPage extends Component {
             dataframe: null,
             columns: [],
             categories: [],
+            isDisplayed: true,
         }
-        // this.movies = {
-        //     upcoming: {
-        //         apiCall: "upcoming",
-        //         header:
-        //         "Stratégie"
-        //     },
-        //     topRated: {
-        //         apiCall: "top_rated",
-        //         header: "Spécifications"
-        //     },
-        //     action: {
-        //         apiCall: 28,
-        //         header: "Ux/Ui"
-        //     },
-        //     adventure: {
-        //         apiCall: 12,
-        //         header: "Contenus"
-        //     },
-        //     animation: {
-        //         apiCall: 16,
-        //         header: "Front-end"
-        //     },
-        //     comedy: {
-        //         apiCall: 35,
-        //         header: "Architecture"
-        //     },
-        //     crime: {
-        //         apiCall: 80,
-        //         header: "Back-end"
-        //     },
-        //     mystery: {
-        //         apiCall: 878,
-        //         header: "Hebergement"
-        //     }
-        // };
+        this.diplayModalBinded = this.diplayModal.bind(this)
     }
 
     async componentWillMount() {
@@ -123,8 +93,6 @@ class SelectionPage extends Component {
         let categories = this.state.dataframe.distinct("Famille d'origine")
         let categoryDivs = []
         var i = 0
-        console.log("categories")
-        console.log(categories)
         categories.chain(category => {
             let cat = category.get("Famille d'origine")
             if (cat !== "") {
@@ -133,7 +101,7 @@ class SelectionPage extends Component {
                 
                 categoryDivs.push(
                     <div key={i++}>
-                        <SelectionList recommandations={distinctRecommandations} category={cat} />
+                        <SelectionList recommandations={distinctRecommandations} category={cat} basketMethod={this.diplayModalBinded} />
                     </div>
                 )
             }
@@ -148,13 +116,19 @@ class SelectionPage extends Component {
         return new Promise( res => setTimeout(res, delay) );
     }
 
+    diplayModal() {
+        this.setState({
+            isDisplayed: !this.state.isDisplayed
+        })
+    }
+
     render() {
         return (
             <div>
+                {/* <div className={"modal-background" + (this.state.isDisplayed ? "visible": "hidden")}></div> */}
+                <button id="two" class="link-button button">Basket</button>
                 { this.state.categories }
-                {/* {Object.keys(this.movies).map((item, i) => (
-                    
-            ))} */}
+                <BasketPage id="modal-container"></BasketPage>
             </div>
         );
     }

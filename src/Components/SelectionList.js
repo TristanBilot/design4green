@@ -13,37 +13,17 @@ class SelectionList extends Component {
   constructor(props) {
     super(props);
 
-    this.mounted = false;
-
     this.state = {
         movies: [],
         movie: {},
         recommandations: props.recommandations,
         category: props.category,
+        basketMethod: props.basketMethod,
       };
   }
 
   componentDidMount() {
-    this.mounted = true;
-    // this.random=Math.floor(Math.random() * 100) + 1  ;
-    // const url =
-    //   typeof this.props.apiCall === "number"
-    //     ? `https://api.themoviedb.org/3/discover/movie?api_key=17117ab9c18276d48d8634390c025df4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&with_genres=${
-    //         this.props.apiCall
-    //       }&page=${this.random}&include_adult=false`
-    //     : `https://api.themoviedb.org/3/movie/${this.props.apiCall}?api_key=17117ab9c18276d48d8634390c025df4&language=en-US&page=1&include_adult=false`;
-
-    // fetch(url)
-    //   .then(r => r.json())
-    //   .then(data => {
-    //     if (this.mounted) this.setState({ movies: data.results });
-    //   })
-    //   .catch(err => console.log(err));
     this.loadRecommandations()
-  }
-
-  componentWillUnmount() {
-    this.mounted = false;
   }
 
   loadRecommandations() {
@@ -52,7 +32,7 @@ class SelectionList extends Component {
     this.state.recommandations.chain(recommandation => {
       recommandationDivs.push(
           <div className="menu-item" key={i++}>
-              <Recommandation recommandation={recommandation} category={this.state.category} />
+              <Recommandation recommandation={recommandation} category={this.state.category} basketMethod={this.state.basketMethod} />
           </div>
       )
     })
@@ -68,14 +48,10 @@ class SelectionList extends Component {
   }
 
   render() {
-    console.log("this.state.categoru")
-    console.log(this.state.category)
     return (
       <div style={{
         backgroundColor: "white",
         color: "black",
-        // texAlign: "center",
-        // textOverflow: "hidden"
       }}
        className="lists" >
         <br/>
@@ -91,9 +67,7 @@ class SelectionList extends Component {
           alignCenter={false}
           clickWhenDrag={false}
         />
-      
       </div>
-      
     );
   }
 }

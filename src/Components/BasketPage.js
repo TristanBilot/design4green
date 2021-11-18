@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './css/basketPage.scss'
+import Page from './Cart';
+
 
 class BasketPage extends Component {
 
@@ -27,7 +29,7 @@ class BasketPage extends Component {
                     <div class="modal-background">
                         <div class="modal">
                             <div id="close_modal_action"><i class="fas fa-times close_modal"></i></div>
-                            <h2>My cart</h2>
+                                <Page id="shopping_cart"></Page>
                             
                         </div>
                     </div>

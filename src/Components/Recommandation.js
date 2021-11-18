@@ -9,7 +9,8 @@ class Recommandation extends Component {
 
     this.state = {
       recommandation: props.recommandation,
-      isHovering: false
+      basketMethod: props.basketMethod,
+      isHovering: false,
     };
   }
 
@@ -25,21 +26,21 @@ class Recommandation extends Component {
     // const { movie } = this.props;
     return (
       // <Link to={"/" + this.state.recommandation} style={{color:"black"}}>
+      <div onClick={this.state.basketMethod}>
         <div
           className="movie-card"
           onMouseEnter={this.handleEnter}
           onMouseLeave={this.handleLeave}
         >
           
-          <p>
             <p style={{color:"black",whiteSpace: "nowrap",overflow: "hidden",textOverflow:"clip", overflowwrap: "breakWord"}}>
             {this.state.recommandation}
             </p>
-          </p>
           {this.state.isHovering && (
             <h3 className="movie-title">
             </h3>
           )}
+        </div>
         </div>
       // </Link>
     );

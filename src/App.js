@@ -2,7 +2,7 @@ import MainPage from "./Components/MainPage";
 import './Components/css/app.scss'
 import './Components/css/selectionPage.css'
 import SelectionPage from "./Components/SelectionPage";
-
+import Cart from "./Components/Cart";
 
 import {
   BrowserRouter as Router,
@@ -21,6 +21,12 @@ function App() {
         <Switch>
           <Route path="/list">
           <SelectionPage></SelectionPage>
+            {/* <Tsp />
+            <TspScript /> */}
+          </Route>
+
+          <Route path="/cart">
+          <Cart></Cart>
             {/* <Tsp />
             <TspScript /> */}
           </Route>
