@@ -7,7 +7,7 @@ import './css/graph.css'
 
 const Papa = require('papaparse');
 
-class Graph extends Component {
+class GraphPage extends Component {
 
     constructor(props) {
         super(props)
@@ -257,7 +257,7 @@ class Graph extends Component {
         console.log(editingResources)
         return (<div className='control-pane'>
         <div className='control-section'>
-          <GanttComponent id='GanttExport' ref={gantt => this.ganttInstance = gantt} rowHeight={45} taskbarHeight={35} dataSource={this.state.graph} dateFormat={'MMM dd, y'} treeColumnIndex={1} allowExcelExport={true} allowPdfExport={true} allowSelection={true} showColumnMenu={false} highlightWeekends={true} allowUnscheduledTasks={true} projectStartDate={this.projectStartDate} projectEndDate={this.projectEndDate} splitterSettings={this.splitterSettings} taskFields={this.taskFields} timelineSettings={this.timelineSettings} labelSettings={this.labelSettings} toolbarClick={this.toolbarClick.bind(this)} height='410px' gridLines={this.gridLines} toolbar={this.toolbar} resourceFields={this.resourceFields} resources={editingResources} taskbarTemplate={this.taskbarWithColorBinded}>
+          <GanttComponent id='GanttExport' ref={gantt => this.ganttInstance = gantt} height='700px' rowHeight={45} taskbarHeight={35} dataSource={this.state.graph} dateFormat={'MMM dd, y'} treeColumnIndex={1} allowExcelExport={true} allowPdfExport={true} allowSelection={true} showColumnMenu={false} highlightWeekends={true} allowUnscheduledTasks={true} projectStartDate={this.projectStartDate} projectEndDate={this.projectEndDate} splitterSettings={this.splitterSettings} taskFields={this.taskFields} timelineSettings={this.timelineSettings} labelSettings={this.labelSettings} toolbarClick={this.toolbarClick.bind(this)} height='410px' gridLines={this.gridLines} toolbar={this.toolbar} resourceFields={this.resourceFields} resources={editingResources} taskbarTemplate={this.taskbarWithColorBinded}>
             <ColumnsDirective>
               <ColumnDirective field='TaskID' width='60'></ColumnDirective>
               <ColumnDirective field='TaskName' width='250'></ColumnDirective>
@@ -275,4 +275,4 @@ class Graph extends Component {
     }
 }
 
-export default Graph;
+export default GraphPage;

@@ -1,5 +1,7 @@
 import ListsOfMovies from "./Components/ListOfMovies";
-import Graph from "./Components/Graph";
+import GraphPage from "./Components/GraphPage";
+import MainPage from "./Components/MainPage";
+import './Components/css/app.scss'
 
 import {
   BrowserRouter as Router,
@@ -24,7 +26,8 @@ function App() {
           </Route>
 
           <Route path='/'>
-            <Graph></Graph>
+            {/* <GraphPage></GraphPage> */}
+            <MainPage></MainPage>
             {/* here are the components */}
           </Route>
         </Switch>
