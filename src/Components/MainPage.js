@@ -48,7 +48,7 @@ class MainPage extends Component {
                     </div>
                 </div>
 
-                <BasketPage id="modal-container"></BasketPage>
+                {/* <BasketPage id="modal-container"></BasketPage> */}
             </div>
         );
     }

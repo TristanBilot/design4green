@@ -14,17 +14,11 @@ function _defineProperty(obj, key, value) {
 }
 
 function Header(props) {
-// const itemCount = document.getElementsByClassName("products").childElementCount;
-// console.log("toto :  ", document.getElementsByClassName("products").childElementCount)
-
   return React.createElement("header", {
     className: "container"
   }, React.createElement("h1", null, "Shopping Cart"), React.createElement("ul", {
     className: "breadcrumb"
   }, React.createElement("li", null, "Home"), React.createElement("li", null, "Shopping Cart")), 
-//   React.createElement("span", {
-//     className: "count"
-//   },itemCount, " Items")
 );
 }
 
@@ -32,27 +26,24 @@ function ProductList(props) {
   return React.createElement("section", {
     className: "container"
   }, React.createElement("ul", {
-    className: "products",
+    className: "products cart-scrollable-list",
     divId: ""
   }, props.products.map((product, index) => {
+    let isMandatory = product.mandatory
     return React.createElement("li", {
       className: "row",
       key: index
     }, React.createElement("div", {
-      className: "col left"
+      className: "col left centered-div " + (isMandatory ? "isMandatory" : "")
     }, React.createElement("div", {
-      className: "thumbnail"
-    }, React.createElement("a", {
-      href: "#"
-    })), React.createElement("div", {
       className: "detail"
     }, React.createElement("div", {
       className: "name"
     }, React.createElement("a", {
       href: "#"
-    }, product.name)), React.createElement("div", {
+    }, product.id)), React.createElement("div", {
       className: "description"
-    }, product.description), React.createElement("div", {
+    }, product.useCase), React.createElement("div", {
       className: "col right"
     }, React.createElement("div", {
       className: "remove"
@@ -79,13 +70,13 @@ function Summary(props) {
     className: "checkout"
   }, React.createElement("button", {
     type: "button"
-  }, "Check Out")));
+  }, "See my planning")));
 }
 
 class Cart extends React.Component {
   constructor(props) {
     super(props);
-    
+
     _defineProperty(this, "onRemoveProduct", i => {
       const products = this.state.products.filter((product, index) => {
         return index != i;
@@ -108,11 +99,18 @@ class Cart extends React.Component {
         quantity: 1
       }],
       tax: 5,
+      basket: props.basket,
     };
   }
 
+  componentWillReceiveProps(newProps) {
+    this.setState({
+        basket: newProps.basket,
+    })
+}
+
   render() {
-    const products = this.state.products;
+    const products = this.state.basket;
     return React.createElement("div", null, React.createElement(Header, {
       products: products
     }), products.length > 0 ? React.createElement("div", null, React.createElement(ProductList, {

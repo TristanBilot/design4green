@@ -17,13 +17,14 @@ class SelectionPage extends Component {
             columns: [],
             categories: [],
             isDisplayed: true,
+            basket: [],
         }
         this.diplayModalBinded = this.diplayModal.bind(this)
     }
 
     async componentWillMount() {
         await this.loadCsv()
-        await this.timeout(100)
+        await this.timeout(200)
         await this.loadCategories()
     }
 
@@ -37,6 +38,28 @@ class SelectionPage extends Component {
           });
         }
     }
+
+    formatBasketItem(row) {
+        let id = row.get("ID")
+        let family = row.get("Famille d'origine")
+        let recommandation = row.get("RECOMMANDATION")
+        let criterion = row.get("CRITERES")
+        let justifs = row.get("JUSTIFICATIONS")
+        let cycle = row.get("Etape Cycle de Vie")
+        let mandatory = row.get("incontournables") === "INCONTOURNABLE"
+        let useCase = row.get("Use Case")
+
+        return {
+            id: id,
+            family: family,
+            recommandation: recommandation,
+            criterion: criterion,
+            justifs: justifs,
+            cycle: cycle,
+            mandatory: mandatory,
+            useCase: useCase,
+        }
+    }
     
     loadCsvBinded(input) {
         let csv = input.data
@@ -45,9 +68,22 @@ class SelectionPage extends Component {
         let df = new DataFrame(data, columns)
     
         // df = df.chain(row => row.get("Etape Cycle de Vie") != "N/A")
+
+        let mandatoryCriterions = df.filter(row => 
+            row.get("incontournables") === "INCONTOURNABLE").select(
+                "ID", "CRITERES", "Famille d'origine", "RECOMMANDATION", "CRITERES", "JUSTIFICATIONS", 
+                "Etape Cycle de Vie", "incontournables", "Use Case"
+            )
+        let basketItems = []
+        mandatoryCriterions.chain(row => {
+            basketItems.push(this.formatBasketItem(row))
+            return row
+        })
+
         this.setState({
-          "columns": columns,
-          "dataframe": df
+          columns: columns,
+          dataframe: df,
+          basket: basketItems
         })
     }
 
@@ -128,7 +164,7 @@ class SelectionPage extends Component {
                 {/* <div className={"modal-background" + (this.state.isDisplayed ? "visible": "hidden")}></div> */}
                 <button id="two" class="link-button button">Basket</button>
                 { this.state.categories }
-                <BasketPage id="modal-container"></BasketPage>
+                <BasketPage id="modal-container" basket={this.state.basket}></BasketPage>
             </div>
         );
     }

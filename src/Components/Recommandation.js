@@ -5,8 +5,6 @@ class Recommandation extends Component {
   constructor(props) {
     super(props)
 
-    console.log(props.recommandation)
-
     this.state = {
       recommandation: props.recommandation,
       basketMethod: props.basketMethod,

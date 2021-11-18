@@ -1,31 +1,21 @@
-* {
-    box-sizing: border-box;
-  }
-  
-  html {
-    font-size: 12px;
-  }
-  
-  body {
-    margin: 20px 0;
-    padding: 0;
-    font-family: arial, sans-serif;
-    overflow: scroll;
-  }
-  
-  img {
-    max-width: 100%;
-    vertical-align: middle;
-    border-radius: 4px;
-  }
-  
+.centered-div {
+  display: flex;
+  justify-content: center;
+}
+
+.cart-scrollable-list {
+  overflow: hidden;
+  overflow-y: scroll;
+  height: 600px;
+}
+
+.isMandatory {
+  background: rgba(0, 0, 0, 0.07);
+}
+
   a {
     text-decoration: none;
     color: #333333;
-  }
-  
-  a:hover {
-    color: #f58551;
   }
   
   button {
