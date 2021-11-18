@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './css/mainPage.css'
+import './css/basketPage.scss'
+import BasketPage from './BasketPage';
 
 class MainPage extends Component {
 
@@ -39,15 +41,13 @@ class MainPage extends Component {
                     <p>Plan eco-designed projects easily.</p>
                     <div class="buttons-con">
                         <div class="action-link-wrap">
-                        <button onClick={this.onStartCLickBinded} class="link-button">Start the tool 🌳</button>
+                        <button id="two" class="link-button button">Start the tool 🌳</button>
                         </div>
                     </div>
                     </div>
                 </div>
 
-                <div className={this.state.hasClick ? "visible" : "hidden"}>
-                    
-                </div>
+                <BasketPage id="modal-container"></BasketPage>
             </div>
         );
     }

@@ -17,3 +17,15 @@ $(function($) {
       $(window).on('scroll', doAnimations)
       $(window).trigger('scroll')
   });
+
+$('.button').click(function(){
+  var buttonId = $(this).attr('id');
+  $('#modal-container').removeAttr('class').addClass(buttonId);
+  $('body').addClass('modal-active');
+})
+
+$('#close_modal_action').click(function(){
+  console.log('heyey')
+  $("#modal-container").addClass('out');
+  $('body').removeClass('modal-active');
+});
