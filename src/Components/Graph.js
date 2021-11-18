@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { GanttComponent, Inject, Selection, Toolbar, ExcelExport, PdfExport, ColumnsDirective, ColumnDirective } from '@syncfusion/ej2-react-gantt';
-import { editingData, editingResources } from './data';
+import { editingResources } from './scripts/graph_data';
 import csvFile from '../INR.csv'
 import DataFrame from "dataframe-js";
+import './css/graph.css'
 
 const Papa = require('papaparse');
 
@@ -16,6 +17,19 @@ class Graph extends Component {
             graph: [],
             graphLabels: [],
           }
+
+        this.taskbarWithColorBinded = this.taskbarWithColor.bind(this)
+
+        this.taskBarColors = {
+            "STRATEGIE": "#1b5e20",
+            "SPECIFICATIONS": "#00695c",
+            "UX/UI": "#0097a7",
+            "CONTENUS": "#039be5",
+            "ARCHITECTURE": "#2196f3",
+            "FRONTEND": "#5c6bc0",
+            "BACKEND": "#9575cd",
+            "HEBERGEMENT": "#ce93d8",
+        }
 
         this.taskFields = {
             id: 'TaskID',
@@ -49,7 +63,7 @@ class Graph extends Component {
             },
         };
         this.labelSettings = {
-            leftLabel: 'TaskName',
+            // leftLabel: 'TaskName',
             rightLabel: 'resources'
         };
     }
@@ -105,7 +119,10 @@ class Graph extends Component {
             "STR-1.16",
             "STR-3.C06",
             "STR-3.C05",
-            "STR-3.07"
+            "STR-3.07",
+            "SPC-6.C01",
+            "UX/UI-3.01",
+            "ARCH-9.C02"
         ])
     
         let cycleLifeCategories = [ 'Acquisition', 'Conception', 'Réalisation', 'Déploiement', 'Administration', 
@@ -121,6 +138,8 @@ class Graph extends Component {
 
         df.chain(row => {
             let cycleLifeIndex = cycleLifeCategories.indexOf(row.get("Etape Cycle de Vie"))
+            console.log('cycleLifeIndex')
+            console.log(cycleLifeIndex)
             let begXPosition = new Date(baseXPosition.getTime() + (widthOfCycleLife * cycleLifeIndex) * day)
             let endXPosition = new Date(baseXPosition.getTime() + (widthOfCycleLife * cycleLifeIndex) * day + widthOfCycleLife * day)
     
@@ -130,6 +149,8 @@ class Graph extends Component {
                 StartDate: begXPosition,
                 EndDate: endXPosition,
                 subtasks: [],
+                category: row.get("Famille d'origine"),
+                useCase: row.get("Use Case")
             }
             if (lastRow != null && lastRow.get("Etape Cycle de Vie") != row.get("Etape Cycle de Vie")) {
                 node["Predecessor"] = i - 1
@@ -143,7 +164,7 @@ class Graph extends Component {
                 resourceName: row.get("CRITERES")
             })
         })
-        // graph[2]["Predecessor"] = 2
+
         console.log(graph)
     
         this.setState({
@@ -159,7 +180,7 @@ class Graph extends Component {
         ids.forEach(id => {
             let df = this.state.dataframe.filter(row => row
             .get("ID") === id)
-            .select("CRITERES", "Etape Cycle de Vie", "incontournables", "Use Case", "JUSTIFICATIONS", "Priorité");
+            .select("Famille d'origine", "CRITERES", "Etape Cycle de Vie", "incontournables", "Use Case", "JUSTIFICATIONS", "Priorité");
             dfs.push(df)
         })
         
@@ -211,6 +232,15 @@ class Graph extends Component {
         return new Promise( res => setTimeout(res, delay) );
     }
 
+    taskbarWithColor(props) {
+        return (
+        <div className="e-gantt-child-taskbar e-custom-moments" style={{ height: "100%", borderRadius: "5px", backgroundColor:this.taskBarColors[props.taskData.category], textAlign: "center" }}>
+            <div>
+              <span className="e-task-label" style={{textOoverflow: "ellipsis", height: "90%", overflow: "hidden", color: "white", fontSize: "10px" }}>{props.taskData.useCase}</span>
+            </div>
+        </div>)
+    }
+
     toolbarClick(args) {
         if (args.item.id === "GanttExport_excelexport") {
             this.ganttInstance.excelExport();
@@ -226,7 +256,7 @@ class Graph extends Component {
         console.log(editingResources)
         return (<div className='control-pane'>
         <div className='control-section'>
-          <GanttComponent id='GanttExport' ref={gantt => this.ganttInstance = gantt} dataSource={this.state.graph} dateFormat={'MMM dd, y'} treeColumnIndex={1} allowExcelExport={true} allowPdfExport={true} allowSelection={true} showColumnMenu={false} highlightWeekends={true} allowUnscheduledTasks={true} projectStartDate={this.projectStartDate} projectEndDate={this.projectEndDate} splitterSettings={this.splitterSettings} taskFields={this.taskFields} timelineSettings={this.timelineSettings} labelSettings={this.labelSettings} toolbarClick={this.toolbarClick.bind(this)} height='410px' gridLines={this.gridLines} toolbar={this.toolbar} resourceFields={this.resourceFields} resources={editingResources}>
+          <GanttComponent id='GanttExport' ref={gantt => this.ganttInstance = gantt} rowHeight={45} taskbarHeight={35} dataSource={this.state.graph} dateFormat={'MMM dd, y'} treeColumnIndex={1} allowExcelExport={true} allowPdfExport={true} allowSelection={true} showColumnMenu={false} highlightWeekends={true} allowUnscheduledTasks={true} projectStartDate={this.projectStartDate} projectEndDate={this.projectEndDate} splitterSettings={this.splitterSettings} taskFields={this.taskFields} timelineSettings={this.timelineSettings} labelSettings={this.labelSettings} toolbarClick={this.toolbarClick.bind(this)} height='410px' gridLines={this.gridLines} toolbar={this.toolbar} resourceFields={this.resourceFields} resources={editingResources} taskbarTemplate={this.taskbarWithColorBinded}>
             <ColumnsDirective>
               <ColumnDirective field='TaskID' width='60'></ColumnDirective>
               <ColumnDirective field='TaskName' width='250'></ColumnDirective>
