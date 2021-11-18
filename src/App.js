@@ -1,7 +1,8 @@
-import ListsOfMovies from "./Components/ListOfMovies";
-import GraphPage from "./Components/GraphPage";
 import MainPage from "./Components/MainPage";
 import './Components/css/app.scss'
+import './Components/css/selectionPage.css'
+import SelectionPage from "./Components/SelectionPage";
+
 
 import {
   BrowserRouter as Router,
@@ -9,7 +10,6 @@ import {
   Route,
 } from "react-router-dom";
 
-import './App.css';
 import '@fortawesome/fontawesome-free/js/brands'
 import '@fortawesome/fontawesome-free/js/solid'
 import '@fortawesome/fontawesome-free/js/fontawesome'
@@ -20,7 +20,7 @@ function App() {
       <div id="app-root">
         <Switch>
           <Route path="/list">
-          <ListsOfMovies></ListsOfMovies>
+          <SelectionPage></SelectionPage>
             {/* <Tsp />
             <TspScript /> */}
           </Route>
