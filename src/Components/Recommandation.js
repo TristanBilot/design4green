@@ -1,10 +1,17 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-class SingleMovie extends Component {
-  state = {
-    isHovering: false
-  };
+class Recommandation extends Component {
+  constructor(props) {
+    super(props)
+
+    console.log(props.recommandation)
+
+    this.state = {
+      recommandation: props.recommandation,
+      isHovering: false
+    };
+  }
 
   handleEnter = () => {
     this.setState({ isHovering: true });
@@ -15,9 +22,9 @@ class SingleMovie extends Component {
   };
 
   render() {
-    const { movie } = this.props;
+    // const { movie } = this.props;
     return (
-      <Link to={"/" + movie.id} style={{color:"black"}}>
+      <Link to={"/" + this.state.recommandation} style={{color:"black"}}>
         <div
           className="movie-card"
           onMouseEnter={this.handleEnter}
@@ -25,8 +32,8 @@ class SingleMovie extends Component {
         >
           
           <p style={{width:"180px"}}>
-          <p style={{color:"black",whiteSpace: "nowrap",overflow: "hidden",textOverflow:"clip", color:"white"}}>
-          {movie.title}
+          <p style={{color:"white",whiteSpace: "nowrap",overflow: "hidden",textOverflow:"clip", color:"white"}}>
+          {this.state.recommandation}
           </p>
           </p>
           {this.state.isHovering && (
@@ -39,4 +46,4 @@ class SingleMovie extends Component {
   }
 }
 
-export default SingleMovie
+export default Recommandation

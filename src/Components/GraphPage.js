@@ -75,38 +75,7 @@ class GraphPage extends Component {
         await this.getGanttGraph()
     }
 
-    async loadCsv() {
-        if (this.state.dataframe == null) {
-            var binded = this.loadCsvBinded.bind(this)
-            Papa.parse(csvFile, {
-              download: true,
-              complete: binded,
-              encoding: 'UTF-8'
-          });
-        }
-    }
     
-    loadCsvBinded(input) {
-        let csv = input.data
-        let columns = csv[0]
-        let data = csv.slice(1)
-        let df = new DataFrame(data, columns)
-    
-        // df = df.chain(row => row.get("Etape Cycle de Vie") != "N/A")
-        this.setState({
-          "columns": columns,
-          "dataframe": df
-        })
-    }
-
-    translateCycleLifeToInteger(row) {
-        let cycleLife = row.get("Etape Cycle de Vie")
-        let priorities = [ 'Acquisition', 'Conception', 'Réalisation', 'Déploiement', 'Administration', 
-         'Utilisation', 'Maintenance', 'Fin de Vie', 'Revalorisation' ]
-    
-         row = row.set("Cycle life priority", priorities.indexOf(cycleLife))
-         return row
-      }
 
     async getGanttGraph(criterions) {
         console.log("this.state.dataframe")
@@ -196,38 +165,6 @@ class GraphPage extends Component {
         totalDf = this.sortDataframe(totalDf)
         return totalDf
     }
-
-    sortDataframe(df) {
-        // add a new colum with an integer representing the priority based on cycle life
-        df = df.withColumn("Cycle life priority")
-        df = df.chain(this.translateCycleLifeToInteger)
-    
-        // sort first by priority and then by cycle life to make groups
-        df = df.sortBy("Priorité")
-        df = df.sortBy("Cycle life priority")
-        return df
-      }
-
-    translatePriorityToInteger(row) {
-        let priority = row.get("Priorité")
-        let priorities = {
-          "Low": 1,
-          "Medium": 2,
-          "High": 3,
-          "": 4,
-        }
-        row = row.set("Priorité", priorities[priority])
-        return row
-    }
-
-    translateCycleLifeToInteger(row) {
-        let cycleLife = row.get("Etape Cycle de Vie")
-        let priorities = [ 'Acquisition', 'Conception', 'Réalisation', 'Déploiement', 'Administration', 
-         'Utilisation', 'Maintenance', 'Fin de Vie', 'Revalorisation' ]
-    
-         row = row.set("Cycle life priority", priorities.indexOf(cycleLife))
-         return row
-      }
 
     timeout(delay) {
         return new Promise( res => setTimeout(res, delay) );
