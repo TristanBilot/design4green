@@ -123,15 +123,20 @@ class SelectionPage extends Component {
         let categories = this.state.dataframe.distinct("Famille d'origine")
         let categoryDivs = []
         var i = 0
+        console.log("categories")
+        console.log(categories)
         categories.chain(category => {
-            let recommandationsWithCategories = this.state.dataframe.filter(row => row.get("Famille d'origine") === category.get("Famille d'origine")).select("Famille d'origine", "RECOMMANDATION")
-            let distinctRecommandations = recommandationsWithCategories.distinct("RECOMMANDATION")
-            
-            categoryDivs.push(
-                <div key={i++}>
-                    <SelectionList recommandations={distinctRecommandations} category={category.get("Famille d'origine")} />
-                </div>
-            )
+            let cat = category.get("Famille d'origine")
+            if (cat !== "") {
+                let recommandationsWithCategories = this.state.dataframe.filter(row => row.get("Famille d'origine") === cat).select("Famille d'origine", "RECOMMANDATION")
+                let distinctRecommandations = recommandationsWithCategories.distinct("RECOMMANDATION")
+                
+                categoryDivs.push(
+                    <div key={i++}>
+                        <SelectionList recommandations={distinctRecommandations} category={cat} />
+                    </div>
+                )
+            }
         })
 
         this.setState({
@@ -144,7 +149,6 @@ class SelectionPage extends Component {
     }
 
     render() {
-        console.log(this.state.dataframe)
         return (
             <div>
                 { this.state.categories }

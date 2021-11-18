@@ -24,24 +24,24 @@ class Recommandation extends Component {
   render() {
     // const { movie } = this.props;
     return (
-      <Link to={"/" + this.state.recommandation} style={{color:"black"}}>
+      // <Link to={"/" + this.state.recommandation} style={{color:"black"}}>
         <div
           className="movie-card"
           onMouseEnter={this.handleEnter}
           onMouseLeave={this.handleLeave}
         >
           
-          <p style={{width:"180px"}}>
-          <p style={{color:"white",whiteSpace: "nowrap",overflow: "hidden",textOverflow:"clip", color:"white"}}>
-          {this.state.recommandation}
-          </p>
+          <p>
+            <p style={{color:"black",whiteSpace: "nowrap",overflow: "hidden",textOverflow:"clip", overflowwrap: "breakWord"}}>
+            {this.state.recommandation}
+            </p>
           </p>
           {this.state.isHovering && (
             <h3 className="movie-title">
             </h3>
           )}
         </div>
-      </Link>
+      // </Link>
     );
   }
 }
