@@ -72,28 +72,9 @@ class GraphPage extends Component {
     }
 
     async getGanttGraph(criterions) {
-        console.log("this.state.dataframe")
-        console.log(this.state.dataframe)
         if (this.state.dataframe == null)
             return []
 
-        // let ids = this.state.basket.map(e => e.id)
-        // let df = this.getGanttInfoAsDataframe(ids)
-        // console.log(df)
-        // return
-
-        // [
-        //     "STR-1.07",
-        //     "STR-1.C09",
-        //     "STR-1.16",
-        //     "STR-3.C06",
-        //     "STR-3.C05",
-        //     "STR-3.07",
-        //     "SPC-6.C01",
-        //     "UX/UI-3.01",
-        //     "ARCH-9.C02"
-        // ]
-    
         let cycleLifeCategories = [ 'Acquisition', 'Conception', 'Réalisation', 'Déploiement', 'Administration', 
             'Utilisation', 'Maintenance', 'Fin de Vie', 'Revalorisation' ]
     
@@ -131,8 +112,6 @@ class GraphPage extends Component {
                 resourceName: element.criterion
             })
         })
-
-        console.log(graph)
     
         this.setState({
             graph: graph,
@@ -220,7 +199,6 @@ class GraphPage extends Component {
         }
     }
     render() {
-        console.log(editingResources)
         return (<div className='control-pane'>
         <div className='control-section'>
           <GanttComponent id='GanttExport' ref={gantt => this.ganttInstance = gantt} height='700px' rowHeight={45} taskbarHeight={35} dataSource={this.state.graph} dateFormat={'MMM dd, y'} treeColumnIndex={1} allowExcelExport={true} allowPdfExport={true} allowSelection={true} showColumnMenu={false} highlightWeekends={true} allowUnscheduledTasks={true} projectStartDate={this.projectStartDate} projectEndDate={this.projectEndDate} splitterSettings={this.splitterSettings} taskFields={this.taskFields} timelineSettings={this.timelineSettings} labelSettings={this.labelSettings} toolbarClick={this.toolbarClick.bind(this)} height='410px' gridLines={this.gridLines} toolbar={this.toolbar} resourceFields={this.resourceFields} resources={editingResources} taskbarTemplate={this.taskbarWithColorBinded}>

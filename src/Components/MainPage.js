@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './css/mainPage.css'
 import './css/basketPage.scss'
 import BasketPage from './BasketPage';
+import { Link } from "react-router-dom";
 
 class MainPage extends Component {
 
@@ -42,7 +43,7 @@ class MainPage extends Component {
                     <h5 style={{textShadow: "1px 1px 2px pink"}}>#Design4Green #GreenIT</h5>
                     <div class="buttons-con">
                         <div class="action-link-wrap">
-                        <button id="two" class="link-button button">Start the tool 🌳</button>
+                            <a href="/list"><button id="two" class="link-button button"> Start the tool 🌳</button></a>
                         </div>
                     </div>
                     </div>
