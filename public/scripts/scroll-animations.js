@@ -24,8 +24,7 @@ $('.button').click(function(){
   $('body').addClass('modal-active');
 })
 
-$('#close_modal_action').click(function(){
-  console.log('heyey')
+$('.closable').click(function(){
   $("#modal-container").addClass('out');
   $('body').removeClass('modal-active');
 });

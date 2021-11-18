@@ -10,6 +10,7 @@ class BasketPage extends Component {
         
         this.state = {
             basket: props.basket,
+            displayGraphMethod: props.displayGraphMethod,
         }
         this.onStartCLickBinded = this.onStartCLick.bind(this)
     }
@@ -21,18 +22,27 @@ class BasketPage extends Component {
     }
 
     onStartCLick() {
-        this.setState(({
-            hasClick: true
-        }))
+        this.setState(() => {
+            this.state.displayGraphMethod()
+        })
     }
+
+    basketBtn(props) {
+        return <section className="container">
+            <div className="checkout">
+                <button className="closable" type="button" onClick={this.onStartCLickBinded}>See my planning</button>
+            </div>
+        </section>
+      }
     
     render() {
         return (
             <div id="modal-container">
                 <div class="modal-background">
                     <div class="modal">
-                        <div id="close_modal_action"><i class="fas fa-times close_modal"></i></div>
+                        <div className="close_modal_action closable"><i class="fas fa-times close_modal"></i></div>
                             <Cart id="shopping_cart" basket={this.state.basket}></Cart>
+                            { this.basketBtn() }
                     </div>
                 </div>
             </div>);

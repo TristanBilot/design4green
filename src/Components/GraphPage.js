@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 import { GanttComponent, Inject, Selection, Toolbar, ExcelExport, PdfExport, ColumnsDirective, ColumnDirective } from '@syncfusion/ej2-react-gantt';
 import { editingResources } from './scripts/graph_data';
-import csvFile from '../INR.csv'
 import DataFrame from "dataframe-js";
 import './css/graph.css'
-
-const Papa = require('papaparse');
 
 class GraphPage extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            dataframe: null,
+            dataframe: props.dataframe,
             columns: [],
             graph: [],
             graphLabels: [],
@@ -70,8 +67,6 @@ class GraphPage extends Component {
     }
 
     async componentWillMount() {
-        await this.loadCsv()
-        await this.timeout(100)
         await this.getGanttGraph()
     }
 
@@ -164,6 +159,38 @@ class GraphPage extends Component {
         totalDf = totalDf.chain(this.translatePriorityToInteger)
         totalDf = this.sortDataframe(totalDf)
         return totalDf
+    }
+
+    translatePriorityToInteger(row) {
+        let priority = row.get("Priorité")
+        let priorities = {
+          "Low": 1,
+          "Medium": 2,
+          "High": 3,
+          "": 4,
+        }
+        row = row.set("Priorité", priorities[priority])
+        return row
+    }
+
+    translateCycleLifeToInteger(row) {
+        let cycleLife = row.get("Etape Cycle de Vie")
+        let priorities = [ 'Acquisition', 'Conception', 'Réalisation', 'Déploiement', 'Administration', 
+         'Utilisation', 'Maintenance', 'Fin de Vie', 'Revalorisation' ]
+    
+         row = row.set("Cycle life priority", priorities.indexOf(cycleLife))
+         return row
+      }
+
+    sortDataframe(df) {
+        // add a new colum with an integer representing the priority based on cycle life
+        df = df.withColumn("Cycle life priority")
+        df = df.chain(this.translateCycleLifeToInteger)
+    
+        // sort first by priority and then by cycle life to make groups
+        df = df.sortBy("Priorité")
+        df = df.sortBy("Cycle life priority")
+        return df
     }
 
     timeout(delay) {

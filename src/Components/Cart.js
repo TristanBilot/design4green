@@ -27,7 +27,7 @@ function ProductList(props) {
     className: "container"
   }, React.createElement("ul", {
     className: "products cart-scrollable-list",
-    divId: ""
+    divid: ""
   }, props.products.map((product, index) => {
     let isMandatory = product.mandatory
     return React.createElement("li", {
@@ -62,16 +62,6 @@ function ProductList(props) {
   })));
 }
 
-function Summary(props) {
-  return React.createElement("section", {
-    className: "container"
-  },
-  React.createElement("div", {
-    className: "checkout"
-  }, React.createElement("button", {
-    type: "button"
-  }, "See my planning")));
-}
 
 class Cart extends React.Component {
   constructor(props) {
@@ -116,8 +106,6 @@ class Cart extends React.Component {
     }), products.length > 0 ? React.createElement("div", null, React.createElement(ProductList, {
       products: products,
       onRemoveProduct: this.onRemoveProduct
-    }), React.createElement(Summary, {
-      products: products
     })) : React.createElement("div", {
       className: "empty-product"
     }, React.createElement("h3", null, "There are no products in your cart."), React.createElement("button", null, "Shopping now")));

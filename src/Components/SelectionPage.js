@@ -5,6 +5,7 @@ import DataFrame from "dataframe-js";
 import './css/mainPage.css'
 import './css/basketPage.scss'
 import BasketPage from './BasketPage';
+import GraphPage from './GraphPage';
 
 const Papa = require('papaparse');
 
@@ -18,8 +19,10 @@ class SelectionPage extends Component {
             categories: [],
             isDisplayed: true,
             basket: [],
+            shouldDisplayGraph: false,
         }
         this.diplayModalBinded = this.diplayModal.bind(this)
+        this.displayGraphMethodBinded = this.displayGraphMethod.bind(this)
     }
 
     async componentWillMount() {
@@ -87,44 +90,6 @@ class SelectionPage extends Component {
         })
     }
 
-    translateCycleLifeToInteger(row) {
-        let cycleLife = row.get("Etape Cycle de Vie")
-        let priorities = [ 'Acquisition', 'Conception', 'Réalisation', 'Déploiement', 'Administration', 
-         'Utilisation', 'Maintenance', 'Fin de Vie', 'Revalorisation' ]
-    
-         row = row.set("Cycle life priority", priorities.indexOf(cycleLife))
-         return row
-      }
-    sortDataframe(df) {
-        // add a new colum with an integer representing the priority based on cycle life
-        df = df.withColumn("Cycle life priority")
-        df = df.chain(this.translateCycleLifeToInteger)
-    
-        // sort first by priority and then by cycle life to make groups
-        df = df.sortBy("Priorité")
-        df = df.sortBy("Cycle life priority")
-        return df
-    }
-    translatePriorityToInteger(row) {
-        let priority = row.get("Priorité")
-        let priorities = {
-          "Low": 1,
-          "Medium": 2,
-          "High": 3,
-          "": 4,
-        }
-        row = row.set("Priorité", priorities[priority])
-        return row
-    }
-    translateCycleLifeToInteger(row) {
-        let cycleLife = row.get("Etape Cycle de Vie")
-        let priorities = [ 'Acquisition', 'Conception', 'Réalisation', 'Déploiement', 'Administration', 
-         'Utilisation', 'Maintenance', 'Fin de Vie', 'Revalorisation' ]
-    
-         row = row.set("Cycle life priority", priorities.indexOf(cycleLife))
-         return row
-      }
-
     async loadCategories() {
         let categories = this.state.dataframe.distinct("Famille d'origine")
         let categoryDivs = []
@@ -158,13 +123,24 @@ class SelectionPage extends Component {
         })
     }
 
+    displayGraphMethod() {
+        console.log('heheyey')
+        this.setState({
+            shouldDisplayGraph: true,
+        })
+    }
+
     render() {
-        return (
+        return (this.state.shouldDisplayGraph ?
+            <div>
+                <GraphPage dataframe={this.state.dataframe}></GraphPage>
+            </div>
+            :
             <div>
                 {/* <div className={"modal-background" + (this.state.isDisplayed ? "visible": "hidden")}></div> */}
                 <button id="two" class="link-button button">Basket</button>
                 { this.state.categories }
-                <BasketPage id="modal-container" basket={this.state.basket}></BasketPage>
+                <BasketPage id="modal-container" basket={this.state.basket} displayGraphMethod={this.displayGraphMethodBinded}></BasketPage>
             </div>
         );
     }
