@@ -34,7 +34,7 @@ class BasketPage extends Component {
             </div>
         </section>
       }
-    
+
     render() {
         return (
             <div id="modal-container" class="dCart">

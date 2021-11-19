@@ -10,6 +10,8 @@ class GridCriteres extends React.Component{
             dataframe: props.dataframe,
             recommandation: props.recommandation,
             criterions: [],
+            addToBasketMethod: props.addToBasketMethod,
+            closeCartMethod: props.closeCartMethod,
         }
     }
 
@@ -30,8 +32,9 @@ class GridCriteres extends React.Component{
             let id = row.get("ID")
             rows.push(
             <div className="col" id="critereItem" key={(i++).toString()}>
-                <Critere id={id} priority={priority}></Critere>
-            </div>)
+                <Critere id={id} priority={priority} addToBasketMethod={this.state.addToBasketMethod}></Critere>
+            </div>
+            )
             return row
         })
 
@@ -40,7 +43,7 @@ class GridCriteres extends React.Component{
             divs.push(<div className="row" key={i.toString()}>{rows.slice(i * 4, i * 4 + 4)}</div>)
 
         this.setState({
-            criterions: criterions,
+            criterions: divs,
         })
       }
 
@@ -61,6 +64,10 @@ class GridCriteres extends React.Component{
     {
         return (
         <div className="container" >
+            
+            <div id="buttoncontainer" onClick={this.state.closeCartMethod} >
+                <i class="fas fa-times closeCart"></i>
+            </div>
             { this.state.criterions }
         </div>);
     }

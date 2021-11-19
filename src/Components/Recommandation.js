@@ -38,12 +38,12 @@ class Recommandation extends Component {
   }
 
   recommandationLabel() {
-    return this.state.recommandation.get("RECOMMANDATION").substring(0, 38) + "..."
+    return this.state.recommandation.get("RECOMMANDATION")//.substring(0, 38) + "..."
   }
 
   render() {
     return (
-      <div onClick={this.state.basketMethod}>
+      <div onClick={() => this.state.basketMethod(this.state.recommandation.get("RECOMMANDATION"))}>
         <div
           className="movie-card"
           style={{backgroundColor: this.getColor()}}

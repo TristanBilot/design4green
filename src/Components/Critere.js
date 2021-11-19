@@ -7,6 +7,7 @@ class Critere extends React.Component{
       
       this.id = props.id
       this.priority = props.priority
+      this.addToBasketMethod = props.addToBasketMethod
     }
 
     render(){
@@ -19,9 +20,9 @@ class Critere extends React.Component{
             </p>
             <div className="row">
               <div className="col-xs-12 col-md-6">
-                <a className="btn btn-success">
+                <button onClick={ () => this.addToBasketMethod(this.id)} className="btn btn-success">
                   Ajouter
-                </a>
+                </button>
               </div>
 
           </div>

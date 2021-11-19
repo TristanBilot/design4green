@@ -1,5 +1,10 @@
 body {
-  background-color: #c8e6c9;
+  background-color: #fff;
+}
+
+.mainPageBg {
+  background: #c8e6c9;
+  height:100vh;
 }
 
 #anim {

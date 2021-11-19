@@ -21,25 +21,15 @@ function App() {
       <div id="app-root">
         <Switch>
           <Route path="/list">
-          <SelectionPage></SelectionPage>
-            {/* <Tsp />
-            <TspScript /> */}
-          </Route>
-
-          <Route path="/critere">
-              <GridCriteres></GridCriteres>
+            <SelectionPage></SelectionPage>
           </Route>
 
           <Route path="/cart">
-          <Cart></Cart>
-            {/* <Tsp />
-            <TspScript /> */}
+            <Cart></Cart>
           </Route>
 
           <Route path='/'>
-            {/* <GraphPage></GraphPage> */}
             <MainPage></MainPage>
-            {/* here are the components */}
           </Route>
         </Switch>
       </div>

@@ -5,6 +5,7 @@ import DataFrame from "dataframe-js";
 import './css/mainPage.css'
 import './css/basketPage.scss'
 import BasketPage from './BasketPage';
+import GridCriteres from './GridCriteres';
 import GraphPage from './GraphPage';
 
 const Papa = require('papaparse');
@@ -20,13 +21,14 @@ class SelectionPage extends Component {
             isDisplayed: true,
             basket: [],
             shouldDisplayGraph: false,
+            selectedRecommandation: null,
         }
-        // this.diplayModalBinded = this.diplayModal.bind(this)
         this.displayGraphMethodBinded = this.displayGraphMethod.bind(this)
-        this.addToBasketBinded = this.addToBasket.bind(this)
         this.rmToBasketBinded = this.rmToBasket.bind(this)
         this.close=this.close.bind(this)
         this.displayModal = this.displayModal.bind(this)
+        this.addToBasket = this.addToBasket.bind(this)
+        this.closeCart = this.closeCart.bind(this)
     }
 
     async componentWillMount() {
@@ -106,8 +108,8 @@ class SelectionPage extends Component {
                 
                 categoryDivs.push(
                     <div key={i++}>
-                        <SelectionList recommandations={distinctRecommandations} category={cat} basketMethod={this.diplayModalBinded} 
-                        addToBasketMethod={this.addToBasketBinded} rmToBasketMethod={this.rmToBasketBinded}/>
+                        <SelectionList recommandations={distinctRecommandations} category={cat} basketMethod={this.displayModal}
+                        addToBasketMethod={this.addToBasket} rmToBasketMethod={this.rmToBasketBinded}/>
                     </div>
                 )
             }
@@ -122,9 +124,10 @@ class SelectionPage extends Component {
         return new Promise( res => setTimeout(res, delay) );
     }
 
-    displayModal() {
+    displayModal(recommandation) {
         this.setState({
-            isDisplayed: !this.state.isDisplayed
+            isDisplayed: !this.state.isDisplayed,
+            selectedRecommandation: recommandation,
         })
         document.querySelectorAll('.dModal').forEach(item => {
             item.classList.add('two');
@@ -135,7 +138,6 @@ class SelectionPage extends Component {
         document.querySelectorAll('.dModal').forEach(item => {
             item.classList.remove('two');
         });
-        //this.setState({isDisplayed:true})
         this.displayModal();
     }
 
@@ -143,15 +145,13 @@ class SelectionPage extends Component {
         document.querySelectorAll('.dCart').forEach(item => {
             item.classList.add('two');
         });
-        //this.setState({isDisplayed:true})
-        //this.displayModal();
     }
 
     closeCart() {
         document.querySelectorAll('.dCart').forEach(item => {
             item.classList.remove('two');
         });
-        //this.setState({isDisplayed:true})
+        this.setState({isDisplayed:true})
         //this.displayModal();
     }
 
@@ -161,9 +161,17 @@ class SelectionPage extends Component {
         })
     }
 
-    addToBasket(element) {
+    addToBasket(id) {
+        let element = this.state.dataframe.filter(row =>
+            row.get("ID") === id)
+        let items = []
+        element.chain(row => {
+            items.push(this.formatBasketItem(row))
+            return row
+        })
+        let newItem = items[0]
         this.setState(() => {
-            this.state.basket.push(element)
+            this.state.basket.push(newItem)
         })
     }
 
@@ -173,34 +181,41 @@ class SelectionPage extends Component {
         })
     }
 
-    render() { 
-        return ( <>
-        {!this.state.isDisplayed?
-        <div id="modal-container" class="two dModal">
-        <div class="modal-background">
-            <div class="modal">
-                <div onClick={this.close} id="close_modal_action"><i class="fas fa-times close_modal"></i></div>
-                    <h1>enzaro</h1>
+    render() 
+    {
+        return (this.state.shouldDisplayGraph ?
+            <div>
+                <GraphPage dataframe={this.state.dataframe} basket={this.state.basket}></GraphPage>
+            </div>
+            :
+             ( <div style={{background:"white"}}>
+            {!this.state.isDisplayed?
+            <div id="modal-container" class="two dModal">
+            <div class="modal-background">
+                <div class="modal">
+                    <div onClick={this.close} id="close_modal_action"><i class="fas fa-times close_modal"></i></div>
+                        {/* <h1>enzaro</h1> tu boss sur la fermeture de la page ? */}
+                        <GridCriteres dataframe={this.state.dataframe} recommandation={this.state.selectedRecommandation} addToBasketMethod={this.addToBasket} closeCartMethod={this.closeCart}></GridCriteres>
+                </div>
             </div>
         </div>
-    </div>
-        :
-        <div>
-            {/* <div className={"modal-background" + (this.state.isDisplayed ? "visible": "hidden")}></div> */}
-            <h2 className="margin30">Choix des critères</h2>
-            <h5 className="margin30greyed">Veuillez sélectionner parmi les thématiques les bonnes pratiques que vous souhaitez intégrer à votre projet.</h5>
-            <button onClick={this.openCart} class="button basket-btn button-after">Go to cart</button>
-            { this.state.categories }
-            <BasketPage closeCart={this.closeCart} basket={this.state.basket} displayGraphMethod={this.displayGraphMethodBinded}></BasketPage>
-        </div>
-}</>
-        
-    ); 
+            :
+            <div>
+                {/* <div className={"modal-background" + (this.state.isDisplayed ? "visible": "hidden")}></div> */}
+                <h2 className="margin30">Choix des critères</h2>
+                <h5 className="margin30greyed">Veuillez sélectionner parmi les thématiques les bonnes pratiques que vous souhaitez intégrer à votre projet.</h5>
+                <button onClick={this.openCart} class="button basket-btn button-after">Go to cart</button>
+                { this.state.categories }
+                <BasketPage closeCart={this.closeCart} basket={this.state.basket} displayGraphMethod={this.displayGraphMethodBinded}></BasketPage>
+            </div>
     }
     
-    
-    /*{
-        let body = (this.state.shouldDisplayGraph ?
+    <div className="hezight"></div>
+    </div>
+        
+        )); 
+
+        /*let body = (this.state.shouldDisplayGraph ?
             <div>
                 <GraphPage dataframe={this.state.dataframe} basket={this.state.basket}></GraphPage>
             </div>
@@ -218,6 +233,7 @@ class SelectionPage extends Component {
             <div className="hezight"></div>
         </div>
     }*/
+}
 }
 
 export default SelectionPage;

@@ -14,7 +14,8 @@
     -o-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
     box-shadow: 5px 5px 5px rgb(206, 228, 203);
-    width:auto;
+    width: 150px;
+    height: 130px;
 }
 
 
@@ -87,6 +88,7 @@
     border-radius: 4px;
     margin-left: 87%;
     margin-right: 11%;
+
 }
 
 .btn-success {
