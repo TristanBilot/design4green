@@ -16,9 +16,9 @@ function _defineProperty(obj, key, value) {
 function Header(props) {
   return React.createElement("header", {
     className: "container"
-  }, React.createElement("h1", null, "Shopping Cart"), React.createElement("ul", {
+  }, React.createElement("h1", null, "Panier"), React.createElement("ul", {
     className: "breadcrumb"
-  }, React.createElement("li", null, "Home"), React.createElement("li", null, "Shopping Cart")), 
+  }, React.createElement("li", null, "Accueil"), React.createElement("li", null, "Panier")), 
 );
 }
 
@@ -108,7 +108,7 @@ class Cart extends React.Component {
       onRemoveProduct: this.onRemoveProduct
     })) : React.createElement("div", {
       className: "empty-product"
-    }, React.createElement("h3", null, "There are no products in your cart."), React.createElement("button", null, "Shopping now")));
+    }, React.createElement("h3", null, "Votre panier est vide."), React.createElement("button", null, "Shopping now")));
   }
 
 }

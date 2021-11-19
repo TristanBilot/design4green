@@ -225,9 +225,9 @@ class GraphPage extends Component {
 
     render() {
         return (<div className='control-pane'>
-        <a href = "/list"> <button class="link-button button basket-btn button-before">Return</button></a>
+        <a href = "/list"> <button class="link-button button basket-btn button-before">Retour</button></a>
         <div>
-        <h2 className="margin30">Gantt planning</h2>
+        <h2 className="margin30">Diagramme de Gantt</h2>
             <div className='control-section'>
             <GanttComponent id='GanttExport' ref={gantt => this.ganttInstance = gantt} height='700px' rowHeight={45} taskbarHeight={35} dataSource={this.state.graph} dateFormat={'MMM dd, y'} treeColumnIndex={1} allowExcelExport={true} allowPdfExport={true} allowSelection={true} showColumnMenu={false} highlightWeekends={true} allowUnscheduledTasks={true} projectStartDate={this.projectStartDate} projectEndDate={this.projectEndDate} splitterSettings={this.splitterSettings} taskFields={this.taskFields} timelineSettings={this.timelineSettings} labelSettings={this.labelSettings} toolbarClick={this.toolbarClick.bind(this)} height='410px' gridLines={this.gridLines} toolbar={this.toolbar} resourceFields={this.resourceFields} resources={editingResources} taskbarTemplate={this.taskbarWithColorBinded}>
                 <ColumnsDirective>
@@ -244,7 +244,7 @@ class GraphPage extends Component {
             </GanttComponent>
             </div>
             <div className="margin30">
-            <h3>Legend</h3>
+            <h3>Légende</h3>
                 { this.loadLegend() }
                 <div className="legend"></div>
             </div>

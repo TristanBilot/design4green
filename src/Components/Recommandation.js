@@ -8,6 +8,8 @@ class Recommandation extends Component {
     this.state = {
       recommandation: props.recommandation,
       basketMethod: props.basketMethod,
+      addToBasketMethod: props.addToBasketMethod,
+      rmToBasketMethod: props.rmToBasketMethod,
       category: props.category,
       isHovering: false,
     };

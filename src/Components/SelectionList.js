@@ -19,6 +19,8 @@ class SelectionList extends Component {
         recommandations: props.recommandations,
         category: props.category,
         basketMethod: props.basketMethod,
+        addToBasketMethod: props.addToBasketMethod,
+        rmToBasketMethod: props.rmToBasketMethod,
       };
   }
 
@@ -32,7 +34,8 @@ class SelectionList extends Component {
     this.state.recommandations.chain(recommandation => {
       recommandationDivs.push(
           <div className="menu-item" key={i++}>
-              <Recommandation recommandation={recommandation} category={this.state.category} basketMethod={this.state.basketMethod} />
+              <Recommandation recommandation={recommandation} category={this.state.category} basketMethod={this.state.basketMethod}
+              addToBasketMethod={this.state.addToBasketMethod} rmToBasketMethod={this.state.rmToBasketMethod} />
           </div>
       )
     })

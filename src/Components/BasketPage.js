@@ -37,10 +37,10 @@ class BasketPage extends Component {
     
     render() {
         return (
-            <div id="modal-container">
+            <div id="modal-container" class="dCart">
                 <div class="modal-background">
                     <div class="modal">
-                        <div className="close_modal_action closable"><i class="fas fa-times close_modal"></i></div>
+                        <div className="close_modal_action closable" onClick={this.props.closeCart}><i class="fas fa-times close_modal"></i></div>
                             <Cart id="shopping_cart" basket={this.state.basket}></Cart>
                             { this.basketBtn() }
                     </div>

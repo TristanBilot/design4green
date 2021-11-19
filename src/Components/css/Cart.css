@@ -6,7 +6,7 @@
 .cart-scrollable-list {
   overflow: hidden;
   overflow-y: scroll;
-  height: 600px;
+  height: 400px;
 }
 
 .button-before::before {

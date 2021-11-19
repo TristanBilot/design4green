@@ -3,6 +3,7 @@ import './Components/css/app.scss'
 import './Components/css/selectionPage.css'
 import SelectionPage from "./Components/SelectionPage";
 import Cart from "./Components/Cart";
+import GridCriteres from "./Components/GridCriteres";
 
 import {
   BrowserRouter as Router,
@@ -23,6 +24,10 @@ function App() {
           <SelectionPage></SelectionPage>
             {/* <Tsp />
             <TspScript /> */}
+          </Route>
+
+          <Route path="/critere">
+              <GridCriteres></GridCriteres>
           </Route>
 
           <Route path="/cart">
