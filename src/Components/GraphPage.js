@@ -225,6 +225,7 @@ class GraphPage extends Component {
 
     render() {
         return (<div className='control-pane'>
+        <a href = "/list"> <button class="link-button button basket-btn button-before">Return</button></a>
         <div>
         <h2 className="margin30">Gantt planning</h2>
             <div className='control-section'>

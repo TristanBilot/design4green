@@ -130,18 +130,23 @@ class SelectionPage extends Component {
     }
 
     render() {
-        return (this.state.shouldDisplayGraph ?
+        let body = (this.state.shouldDisplayGraph ?
             <div>
                 <GraphPage dataframe={this.state.dataframe} basket={this.state.basket}></GraphPage>
             </div>
             :
             <div>
-                {/* <div className={"modal-background" + (this.state.isDisplayed ? "visible": "hidden")}></div> */}
-                <button id="two" class="link-button button">Basket</button>
+                <h2 className="margin30">Choix des critères</h2>
+                <h5 className="margin30greyed">Veuillez sélectionner parmi les thématiques les bonnes pratiques que vous souhaitez intégrer à votre projet.</h5>
+                <button id="two" class="link-button button basket-btn button-after">Go to cart</button>
                 { this.state.categories }
                 <BasketPage id="modal-container" basket={this.state.basket} displayGraphMethod={this.displayGraphMethodBinded}></BasketPage>
             </div>
         );
+        return <div style={{backgroundColor: "#fff"}}>
+            {body}
+            <div className="hezight"></div>
+        </div>
     }
 }
 

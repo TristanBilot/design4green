@@ -9,6 +9,20 @@
   height: 600px;
 }
 
+.button-before::before {
+  position: relative;
+  right: 0;
+  content: " \276e";
+  transition: all 0.15s linear;
+}
+
+.button-after::after {
+  position: relative;
+  right: 0;
+  content: " \276f";
+  transition: all 0.15s linear;
+}
+
 .isMandatory {
   background: rgba(0, 0, 0, 0.07);
 }
@@ -24,13 +38,6 @@
     color: #ffffff;
     transition: all 0.25s linear;
     cursor: pointer;
-  }
-  
-  button::after {
-    position: relative;
-    right: 0;
-    content: " \276f";
-    transition: all 0.15s linear;
   }
   
   button:hover {

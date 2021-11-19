@@ -35,6 +35,10 @@ class Recommandation extends Component {
     return colors[this.state.category]
   }
 
+  recommandationLabel() {
+    return this.state.recommandation.get("RECOMMANDATION").substring(0, 38) + "..."
+  }
+
   render() {
     return (
       <div onClick={this.state.basketMethod}>
@@ -46,7 +50,7 @@ class Recommandation extends Component {
         >
           
             <p className="recommandationLabel">
-              {this.state.recommandation}
+              {this.recommandationLabel()}
             </p>
           {this.state.isHovering && (
             <h3 className="movie-title">
