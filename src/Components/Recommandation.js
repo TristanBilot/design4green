@@ -36,7 +36,7 @@ class Recommandation extends Component {
   }
 
   recommandationLabel() {
-    return this.state.recommandation.get("RECOMMANDATION").substring(0, 38) + "..."
+    return this.state.recommandation.get("RECOMMANDATION")//.substring(0, 38) + "..."
   }
 
   render() {

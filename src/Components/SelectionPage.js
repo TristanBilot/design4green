@@ -129,6 +129,12 @@ class SelectionPage extends Component {
         })
     }
 
+    addToBasket(element) {
+        this.setState(() => {
+            this.state.basket.push(element)
+        })
+    }
+
     render() {
         let body = (this.state.shouldDisplayGraph ?
             <div>
