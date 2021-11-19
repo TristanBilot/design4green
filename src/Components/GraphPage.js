@@ -198,22 +198,55 @@ class GraphPage extends Component {
             this.ganttInstance.pdfExport();
         }
     }
+
+    loadLegend() {
+        let colors = { "STRATEGIE": "#1b5e20",
+            "SPECIFICATIONS": "#00695c",
+            "UX/UI": "#0097a7",
+            "CONTENUS": "#039be5",
+            "ARCHITECTURE": "#2196f3",
+            "FRONTEND": "#5c6bc0",
+            "BACKEND": "#9575cd",
+            "HEBERGEMENT": "#ce93d8",
+        }
+        let elements = []
+        for (const [label, color] of Object.entries(colors)) {
+            elements.push(
+                <div className="row">
+                    <div className="col legend" style={{backgroundColor: color}}></div>
+                    <div className="col">{label}</div>
+                    <div className="col"></div>
+                    <div className="col"></div>
+                </div>
+            )
+        }
+        return elements
+    }
+
     render() {
         return (<div className='control-pane'>
-        <div className='control-section'>
-          <GanttComponent id='GanttExport' ref={gantt => this.ganttInstance = gantt} height='700px' rowHeight={45} taskbarHeight={35} dataSource={this.state.graph} dateFormat={'MMM dd, y'} treeColumnIndex={1} allowExcelExport={true} allowPdfExport={true} allowSelection={true} showColumnMenu={false} highlightWeekends={true} allowUnscheduledTasks={true} projectStartDate={this.projectStartDate} projectEndDate={this.projectEndDate} splitterSettings={this.splitterSettings} taskFields={this.taskFields} timelineSettings={this.timelineSettings} labelSettings={this.labelSettings} toolbarClick={this.toolbarClick.bind(this)} height='410px' gridLines={this.gridLines} toolbar={this.toolbar} resourceFields={this.resourceFields} resources={editingResources} taskbarTemplate={this.taskbarWithColorBinded}>
-            <ColumnsDirective>
-              <ColumnDirective field='TaskID' width='60'></ColumnDirective>
-              <ColumnDirective field='TaskName' width='250'></ColumnDirective>
-              <ColumnDirective field='StartDate'></ColumnDirective>
-              <ColumnDirective field='EndDate'></ColumnDirective>
-              <ColumnDirective field='Duration'></ColumnDirective>
-              <ColumnDirective field='Predecessor'></ColumnDirective>
-              <ColumnDirective field='resources'></ColumnDirective>
-              <ColumnDirective field='Progress'></ColumnDirective>
-            </ColumnsDirective>
-            <Inject services={[Selection, Toolbar, ExcelExport, PdfExport]}/>
-          </GanttComponent>
+        <div>
+        <h2 className="margin30">Gantt planning</h2>
+            <div className='control-section'>
+            <GanttComponent id='GanttExport' ref={gantt => this.ganttInstance = gantt} height='700px' rowHeight={45} taskbarHeight={35} dataSource={this.state.graph} dateFormat={'MMM dd, y'} treeColumnIndex={1} allowExcelExport={true} allowPdfExport={true} allowSelection={true} showColumnMenu={false} highlightWeekends={true} allowUnscheduledTasks={true} projectStartDate={this.projectStartDate} projectEndDate={this.projectEndDate} splitterSettings={this.splitterSettings} taskFields={this.taskFields} timelineSettings={this.timelineSettings} labelSettings={this.labelSettings} toolbarClick={this.toolbarClick.bind(this)} height='410px' gridLines={this.gridLines} toolbar={this.toolbar} resourceFields={this.resourceFields} resources={editingResources} taskbarTemplate={this.taskbarWithColorBinded}>
+                <ColumnsDirective>
+                <ColumnDirective field='TaskID' width='60'></ColumnDirective>
+                <ColumnDirective field='TaskName' width='250'></ColumnDirective>
+                <ColumnDirective field='StartDate'></ColumnDirective>
+                <ColumnDirective field='EndDate'></ColumnDirective>
+                <ColumnDirective field='Duration'></ColumnDirective>
+                <ColumnDirective field='Predecessor'></ColumnDirective>
+                <ColumnDirective field='resources'></ColumnDirective>
+                <ColumnDirective field='Progress'></ColumnDirective>
+                </ColumnsDirective>
+                <Inject services={[Selection, Toolbar, ExcelExport, PdfExport]}/>
+            </GanttComponent>
+            </div>
+            <div className="margin30">
+            <h3>Legend</h3>
+                { this.loadLegend() }
+                <div className="legend"></div>
+            </div>
         </div>
       </div>);
     }

@@ -124,7 +124,6 @@ class SelectionPage extends Component {
     }
 
     displayGraphMethod() {
-        console.log('heheyey')
         this.setState({
             shouldDisplayGraph: true,
         })

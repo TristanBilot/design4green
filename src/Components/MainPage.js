@@ -1,33 +1,16 @@
 import React, { Component } from 'react';
 import './css/mainPage.css'
 import './css/basketPage.scss'
-import BasketPage from './BasketPage';
-import { Link } from "react-router-dom";
 
 class MainPage extends Component {
 
     constructor(props) {
         super(props)
-        
-        this.state = {
-            hasClick: false,
-        }
-        this.onStartCLickBinded = this.onStartCLick.bind(this)
     }
 
-    async componentWillMount() {
-    }
-
-    onStartCLick() {
-        this.setState(({
-            hasClick: true
-        }))
-    }
-    
     render() {
         return (
             <div>
-                <div className={!this.state.hasClick ? "visible" : "hidden"}>
                     <svg id="anim" width="380px" height="500px" viewBox="0 0 837 1045" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" xmlnsSketch="http://www.bohemiancoding.com/sketch/ns">
                         <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd" sketchType="MSPage">
                             <path d="M353,9 L626.664028,170 L626.664028,487 L353,642 L79.3359724,487 L79.3359724,170 L353,9 Z" id="Polygon-1" stroke="#ffffff" strokeWidth="6" sketchType="MSShapeGroup"></path>
@@ -47,9 +30,6 @@ class MainPage extends Component {
                         </div>
                     </div>
                     </div>
-                </div>
-
-                {/* <BasketPage id="modal-container"></BasketPage> */}
             </div>
         );
     }
